@@ -49,3 +49,6 @@ Temporary Items
 CDN/files
 CDN/public
 node_modules
+.idea
+*.log
+.env
