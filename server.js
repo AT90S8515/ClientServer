@@ -18,7 +18,7 @@ const logger = require('./helpers/logger');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
-const passportMiddleware = require('./middleware/passport');
+const {auth, strategy} = require('./middleware/passport');
 
 // Require routes
 const api = require('./api');
@@ -26,29 +26,8 @@ const api = require('./api');
 // Mongoose setup
 mongoose.connect(process.env.MONGOOSE_URI);
 
-const passportJWT = require('passport-jwt');
-const extractJWT = passportJWT.ExtractJwt;
-const JWTStrategy = passportJWT.Strategy;
-const {User} = require('./models');
-// Passport setup
-passport.use(new JWTStrategy({
-  jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
-  ignoreExpiration: false,
-  jsonWebTokenOptions: {
-    expiresIn: process.env.JWT_EXPIRES
-  }
-}, async (jwtPayload, next) => {
-  console.log('PAYLOAD', jwtPayload);
-
-  const user = await User.findById(jwtPayload.id);
-
-  if (!user) {
-    return next(null, false);
-  }
-
-  return next(null, user);
-}));
+// Set passport strategy
+passport.use(strategy);
 
 // Server setup
 const app = express();
@@ -64,7 +43,7 @@ app.use(passport.initialize());
 // Set Routes
 app.use('/api', api);
 // FOR TESTING ONLY, test your token
-app.get('/authTest', passportMiddleware, (req, res) => {
+app.get('/authTest', auth, (req, res) => {
   res.json({
     success: true,
     message: 'Token validated correctly',
