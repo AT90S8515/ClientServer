@@ -20,7 +20,7 @@ const schema = new mongoose.Schema({
   },
   name: {required: true, trim: true, type: String},
   password: {required: true, select: false, type: String},
-  status: {default: statuses.PENDING, enum: Object.values(statuses), required: true, type: String},
+  status: {default: statuses.ACTIVATED, enum: Object.values(statuses), required: true, type: String}, // TODO: Change default status to pending when mailer ready
   activationToken: {select: false, type: String},
   activationDate: {select: false, type: Date},
   deleted: {default: false, required: true, type: Boolean}
