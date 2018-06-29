@@ -1,4 +1,4 @@
-const pass = require('passport');
+const passport = require('passport');
 const passportJWT = require('passport-jwt');
 const extractJWT = passportJWT.ExtractJwt;
 const JWTStrategy = passportJWT.Strategy;
@@ -13,8 +13,6 @@ module.exports.strategy = new JWTStrategy({
     expiresIn: process.env.JWT_EXPIRES
   }
 }, async (jwtPayload, next) => {
-  console.log('PAYLOAD', jwtPayload);
-
   const user = await User.findById(jwtPayload.id);
 
   if (!user) {
@@ -25,4 +23,4 @@ module.exports.strategy = new JWTStrategy({
 });
 
 // Serves as middleware for routes
-module.exports.auth = pass.authenticate('jwt', {session: false});
+module.exports.auth = passport.authenticate('jwt', {session: false});
