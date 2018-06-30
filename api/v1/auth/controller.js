@@ -8,12 +8,12 @@ module.exports.login = async function (req, res) {
   // We need to explicitly tell mongoose to fetch the password since it's set to select: false
   const user = await User.findOne({email: req.body.email.toLowerCase()}).select('+password');
 
-  if (!user.isActivated()) {
-    return RE(res, 'User not activated', 401);
-  }
-
   if (!user || user.deleted || !(await user.comparePassword(req.body.password))) {
     return RE(res, 'Invalid information', 401);
+  }
+
+  if (!user.isActivated()) {
+    return RE(res, 'User not activated', 401);
   }
 
   return RS(res, user.toJWT());
