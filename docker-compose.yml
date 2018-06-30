@@ -3,7 +3,7 @@ version: "3.6"
 services:
   app:
     build: .
-    command: npm run docker-start
+    command: npm run start-docker
     depends_on:
       - mongo
     ports:
