@@ -14,7 +14,8 @@
     "clean:logs": "cd logs && rm -rf *.log",
     "dev": "NODE_ENV=development nodemon -L server.js",
     "prod": "node server",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "start-docker": "yarn && npm run dev"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
